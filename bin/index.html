@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8"/>
-	<title>TLSSite</title>
+	<title>TLSProxyDetector</title>
 	<meta name="description" content="" />
 	
 	<script src="js/swfobject.js"></script>
@@ -18,7 +18,7 @@
 			wmode: "direct" // can cause issues with FP settings & webcam
 		};
 		var attributes = {
-			id:"TLSSite"
+			id:"TLSProxyDetector"
 		};
 		var embedSWFcallback = function(e) {
 			var button = document.getElementById("testLink");
@@ -30,7 +30,7 @@
 		};
 
 		swfobject.embedSWF(
-			"TLSSite.swf", 
+			"TLSProxyDetector.swf", 
 			"altContent", "100%", "100%", "10.0.0", 
 			"expressInstall.swf", 
 			flashvars, params, attributes, embedSWFcallback);
@@ -42,7 +42,7 @@
 </head>
 <body>
 	<div id="altContent">
-		<h1>TLSSite</h1>
+		<h1>TLSProxyDetector</h1>
 		<p><a href="http://www.adobe.com/go/getflashplayer">Get Adobe Flash player</a></p>
 	</div>
 </body>
