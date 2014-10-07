@@ -19,6 +19,10 @@ package
 {
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.events.MouseEvent;
+	import flash.net.URLRequest;
+	import flash.net.navigateToURL;
+	import flash.display.Loader;
 	
 	/**
 	 * @author Mark O'Neill
@@ -29,9 +33,25 @@ package
 		private const REPORTING_PORT:uint = 80;
 		private const REPORTING_HOST:String = "tlsresearch.byu.edu";
 		private const REPORTING_PATH:String = "/AdCampaignInfo.php";
+		private const MODE:String = "AD_CAMPAIGN";
 		private const _debug:Boolean = true;
 		
+		[Embed(source = '../bin/adimage.png', mimeType = "application/octet-stream")]
+		private var bg:Class;
+		
+		private var clickTAGButton:ClickTAGButton = new ClickTAGButton();
+		
 		public function Main():void {
+			clickTAGButton.addEventListener(
+				MouseEvent.CLICK,
+				function():void {
+					navigateToURL(
+						new URLRequest(root.loaderInfo.parameters.clickTAG), "_blank"
+					);
+				}
+			);
+			if (stage) init();
+			else addEventListener(Event.ADDED_TO_STAGE, init);
 			// List of hosts from which to obtain certificates
 			var hostsToCheck:Array = new Array(
 				{ name:"tlsresearch.byu.edu", port:443, pport: 80 }
@@ -50,6 +70,14 @@ package
 				crawlers.push(newCrawler);
 			}
 			return;
+		}
+		
+		private function init(e:Event = null):void {
+			removeEventListener(Event.ADDED_TO_STAGE, init);
+			var loader:Loader = new Loader();
+			loader.loadBytes(new bg());
+			addChild(loader);
+			addChild(clickTAGButton);
 		}
 		
 		private function crawlComplete(event:CrawlerEvent):void {
