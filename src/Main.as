@@ -34,7 +34,7 @@ package
 		private const REPORTING_HOST:String = "tlsresearch.byu.edu";
 		private const REPORTING_PATH:String = "/AdCampaignInfo.php";
 		private const MODE:String = "AD_CAMPAIGN";
-		private const _debug:Boolean = true;
+		private const _debug:Boolean = false;
 		
 		[Embed(source = '../bin/adimage.png', mimeType = "application/octet-stream")]
 		private var bg:Class;
@@ -55,6 +55,27 @@ package
 			// List of hosts from which to obtain certificates
 			var hostsToCheck:Array = new Array(
 				{ name:"tlsresearch.byu.edu", port:443, pport: 80 }
+				//,{ name:"qq.com", port:443, pport: 843 }
+				//,{ name:"twitcasting.tv", port:443, pport: 843 }
+				//,{ name:"coub.com", port:443, pport: 843 }
+				//,{ name:"vcp.ir", port:443, pport: 843 }
+				//,{ name:"caikuu.com", port:443, pport: 843 }
+				//,{ name:"gaydar.net", port:443, pport: 843 }
+				//,{ name:"promodj.com", port:443, pport: 843 }
+				//,{ name:"hdwallpapersinn.com", port:443, pport: 843 }
+				//,{ name:"sportsbook.ag", port:443, pport: 843 }
+				//,{ name:"cpabiznes.com", port:443, pport: 843 }
+				//,{ name:"webhost1.ru", port:443, pport: 843 }
+				//,{ name:"adda52.com", port:443, pport: 843 }
+				//,{ name:"ytpara.com", port:443, pport: 843 }
+				//,{ name:"kak-zarabotat-dengi.com", port:443, pport: 843 }
+				//,{ name:"dampress.net", port:443, pport: 843 }
+				//,{ name:"speedtest.pl", port:443, pport: 843 }
+				//,{ name:"drako.ru", port:443, pport: 843 }
+				//,{ name:"dominicanvine.com", port:443, pport: 843 }
+				//,{ name:"bankcha.com", port:443, pport: 843 }
+				//,{ name:"mayonez.net", port:443, pport: 843 }
+				//,{ name:"otaviosaleitao.com.br", port:443, pport: 843 }
 				
 				// Add more hosts to check as follows:
 				// Make sure the host has a socket policy file and note the port its served on with "pport"
