@@ -93,6 +93,7 @@ package
 			_reportSent = true;
 			debugPrint("Report Sent");
 			dispatchEvent(new ReporterEvent(ReporterEvent.REPORT_SENT, null));
+			_reportSocket.close();
 			return;
 		}
 		

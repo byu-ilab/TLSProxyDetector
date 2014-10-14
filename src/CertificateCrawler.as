@@ -469,6 +469,7 @@ package
 				_certChainString += "-----BEGIN CERTIFICATE-----\n" + encodedCert + "\n-----END CERTIFICATE-----\n";
 			}
 			//debugPrint("Certificate(s):\n" + _certChainString);
+			_socket.close();
 			var results:Object = { host:_currentHost, message:_certChainString };
 			debugPrint("Dispatching DONE event");
 			dispatchEvent(new CrawlerEvent(CrawlerEvent.CRAWL_DONE, results));

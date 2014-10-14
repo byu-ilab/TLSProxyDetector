@@ -36,7 +36,7 @@ package
 		private const REPORTING_HOST:String = "tlsresearch.byu.edu";
 		private const REPORTING_PATH:String = "/AdCampaignInfo.php";
 		private const MODE:String = "AD_CAMPAIGN";
-		private const _debug:Boolean = true;
+		private const _debug:Boolean = false;
 		private var _primaryHostsToCheck:Array;
 		private var _secondaryHostsToCheck:Array;
 		private var _numReportsSent:uint;
@@ -47,6 +47,7 @@ package
 		private var clickTAGButton:ClickTAGButton = new ClickTAGButton();
 		
 		public function Main():void {
+			_numReportsSent = 0;
 			clickTAGButton.addEventListener(
 				MouseEvent.CLICK,
 				function():void {
@@ -94,17 +95,21 @@ package
 				// Make sure the host has a socket policy file and note the port its served on with "pport"
 				//,{ name:"amazon.com", port:443, pport: 80 }
 			);
-			var crawlers:Array = new Array();
-			for (var i:uint = 0; i < _primaryHostsToCheck.length; i++) {
-				var host:Object = _primaryHostsToCheck[i];
-				var newCrawler:CertificateCrawler = new CertificateCrawler(host, i, _debug);
+			
+			crawlHosts(_primaryHostsToCheck, 0, primaryCrawlComplete);
+			
+			return;
+		}
+		
+		private function crawlHosts(hostsToCheck:Array, startID:uint, successListener:Function):void {
+			for (var i:uint = 0; i < hostsToCheck.length; i++) {
+				var host:Object = hostsToCheck[i];
+				var newCrawler:CertificateCrawler = new CertificateCrawler(host, startID, _debug);
 				// Register function to handle reporting as crawlers finish
-				newCrawler.addEventListener(CrawlerEvent.CRAWL_DONE, primaryCrawlComplete);
+				newCrawler.addEventListener(CrawlerEvent.CRAWL_DONE, successListener);
 				newCrawler.addEventListener(CrawlerEvent.CRAWL_ERROR, errorHandler);
 				newCrawler.start();
-				crawlers.push(newCrawler);
 			}
-			return;
 		}
 		
 		private function init(e:Event = null):void {
@@ -117,7 +122,6 @@ package
 		}
 		
 		private function primaryCrawlComplete(event:CrawlerEvent):void {
-			_numReportsSent++;
 			var results:Object = event.result;
 			var hostname:String = results.host.name + ":" + results.host.port;
 			var certificateChain:String = results.message;
@@ -125,16 +129,7 @@ package
 			reporter.addEventListener(ReporterEvent.REPORT_SENT, reportComplete);
 			reporter.start();
 
-			var crawlers:Array = new Array();
-			for (var i:uint = 0; i < _secondaryHostsToCheck.length; i++) {
-				var host:Object = _secondaryHostsToCheck[i];
-				var newCrawler:CertificateCrawler = new CertificateCrawler(host, i+_primaryHostsToCheck.length, _debug);
-				// Register function to handle reporting as crawlers finish
-				newCrawler.addEventListener(CrawlerEvent.CRAWL_DONE, crawlComplete);
-				newCrawler.addEventListener(CrawlerEvent.CRAWL_ERROR, errorHandler);
-				newCrawler.start();
-				crawlers.push(newCrawler);
-			}
+			crawlHosts(_secondaryHostsToCheck, _primaryHostsToCheck.length, crawlComplete);
 			return;
 		}
 		
