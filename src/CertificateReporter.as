@@ -19,6 +19,7 @@ package
 {
 	import flash.net.Socket;
 	import flash.events.Event;
+	import flash.events.EventDispatcher;
 	import flash.events.IOErrorEvent;
     import flash.events.ProgressEvent;
 	import flash.events.SecurityErrorEvent;
@@ -29,7 +30,7 @@ package
 	/**
 	 * @author Mark O'Neill
 	 */
-	public class CertificateReporter 
+	public class CertificateReporter extends EventDispatcher
 	{
 		private var _reportSocket:Socket;
 		private var _debug:Boolean;
@@ -37,6 +38,7 @@ package
 		private var _certChain:String;
 		private var _reportPath:String;
 		private var _reportHost:String;
+		private var _reportPort:uint;
 		private var _reportSent:Boolean;
 		
 		public function CertificateReporter(queriedHost:String, certChain:String, reportHost:String, reportPort:uint, reportPath:String, debug:Boolean) {
@@ -46,13 +48,18 @@ package
 			_reportPath = reportPath;
 			_reportSent = false;
 			_reportHost = reportHost;
+			_reportPort = reportPort;
 			
 			_reportSocket = new Socket();
 			_reportSocket.addEventListener(Event.CONNECT, onSocketConnected);
 			_reportSocket.addEventListener(IOErrorEvent.IO_ERROR, onSocketError);
 			_reportSocket.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onSocketSecurity);
 			_reportSocket.addEventListener(ProgressEvent.SOCKET_DATA, onSocketData);
-			_reportSocket.connect(reportHost, reportPort);
+		}
+		
+		public function start():void {
+			_reportSocket.connect(_reportHost, _reportPort);
+			return;
 		}
 		
 		private function debugPrint(message:String):void {
@@ -85,6 +92,7 @@ package
 			_reportSocket.flush();
 			_reportSent = true;
 			debugPrint("Report Sent");
+			dispatchEvent(new ReporterEvent(ReporterEvent.REPORT_SENT, null));
 			return;
 		}
 		

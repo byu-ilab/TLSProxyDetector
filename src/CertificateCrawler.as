@@ -465,7 +465,7 @@ package
 				//ExternalInterface.call("postCertificate", test);
 				_certChainString += "-----BEGIN CERTIFICATE-----\n" + encodedCert + "\n-----END CERTIFICATE-----\n";
 			}
-			debugPrint("Certificate(s):\n" + _certChainString);
+			//debugPrint("Certificate(s):\n" + _certChainString);
 			var results:Object = { host:_currentHost, certChain:_certChainString };
 			debugPrint("Dispatching DONE event");
 			dispatchEvent(new CrawlerEvent(CrawlerEvent.CRAWL_DONE, results));
