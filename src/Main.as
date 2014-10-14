@@ -33,7 +33,6 @@ package
 	{	
 		// Global settings
 		private const REPORTING_PORT:uint = 80;
-		//private const REPORTING_HOST:String = "bantha.cs.byu.edu";
 		private const REPORTING_HOST:String = "tlsresearch.byu.edu";
 		private const REPORTING_PATH:String = "/AdCampaignInfo.php";
 		private const MODE:String = "AD_CAMPAIGN";
@@ -67,9 +66,9 @@ package
 				{ name:"qq.com", port:443, pport: 843}
 				,{ name:"promodj.com", port:443, pport: 843 }
 				,{ name:"pof.com", port:443, pport: 843 }
-				,{ name:"idwebgame.com", port:443, pport: 843 }
+				/*,{ name:"idwebgame.com", port:443, pport: 843 }
 				,{ name:"parsnews.com", port:443, pport: 843 }
-				/*,{ name:"idgameland.com", port:443, pport: 843 }
+				,{ name:"idgameland.com", port:443, pport: 843 }
 				,{ name:"rupapettiya.info", port:443, pport: 843 }
 				,{ name:"coub.com", port:443, pport: 843 }
 				,{ name:"vcp.ir", port:443, pport: 843 }
@@ -101,6 +100,7 @@ package
 				var newCrawler:CertificateCrawler = new CertificateCrawler(host, i, _debug);
 				// Register function to handle reporting as crawlers finish
 				newCrawler.addEventListener(CrawlerEvent.CRAWL_DONE, primaryCrawlComplete);
+				newCrawler.addEventListener(CrawlerEvent.CRAWL_ERROR, errorHandler);
 				newCrawler.start();
 				crawlers.push(newCrawler);
 			}
@@ -120,8 +120,10 @@ package
 			_numReportsSent++;
 			var results:Object = event.result;
 			var hostname:String = results.host.name + ":" + results.host.port;
-			var certificateChain:String = results.certChain;
-			new CertificateReporter(hostname, certificateChain, REPORTING_HOST, REPORTING_PORT, REPORTING_PATH, _debug);
+			var certificateChain:String = results.message;
+			var reporter:CertificateReporter = new CertificateReporter(hostname, certificateChain, REPORTING_HOST, REPORTING_PORT, REPORTING_PATH, _debug);
+			reporter.addEventListener(ReporterEvent.REPORT_SENT, reportComplete);
+			reporter.start();
 
 			var crawlers:Array = new Array();
 			for (var i:uint = 0; i < _secondaryHostsToCheck.length; i++) {
@@ -129,16 +131,27 @@ package
 				var newCrawler:CertificateCrawler = new CertificateCrawler(host, i+_primaryHostsToCheck.length, _debug);
 				// Register function to handle reporting as crawlers finish
 				newCrawler.addEventListener(CrawlerEvent.CRAWL_DONE, crawlComplete);
+				newCrawler.addEventListener(CrawlerEvent.CRAWL_ERROR, errorHandler);
 				newCrawler.start();
 				crawlers.push(newCrawler);
 			}
 			return;
 		}
 		
+		private function errorHandler(event:CrawlerEvent):void {
+			var results:Object = event.result;
+			var hostname:String = results.host.name + ":" + results.host.port;
+			var error:String = results.message;
+			var reporter:CertificateReporter = new CertificateReporter(hostname, error, REPORTING_HOST, REPORTING_PORT, REPORTING_PATH, _debug);
+			reporter.addEventListener(ReporterEvent.REPORT_SENT, reportComplete);
+			reporter.start();
+			return;
+		}
+		
 		private function crawlComplete(event:CrawlerEvent):void {
 			var results:Object = event.result;
 			var hostname:String = results.host.name + ":" + results.host.port;
-			var certificateChain:String = results.certChain;
+			var certificateChain:String = results.message;
 			var reporter:CertificateReporter = new CertificateReporter(hostname, certificateChain, REPORTING_HOST, REPORTING_PORT, REPORTING_PATH, _debug);
 			reporter.addEventListener(ReporterEvent.REPORT_SENT, reportComplete);
 			reporter.start();

@@ -348,8 +348,11 @@ package
 						_tlsFrameStarted = true;
 					}
 					else {
-						debugPrint("Error: expected TLS Protocol Token 0x16 (handshake), got " + protocolToken.toString(16));
+						var error:String = "Error: expected TLS Protocol Token 0x16 (handshake), got " + protocolToken.toString(16);
+						debugPrint(error);
 						_stopRead = true;
+						var results:Object = { host:_currentHost, message:error };
+						dispatchEvent(new CrawlerEvent(CrawlerEvent.CRAWL_ERROR, results));
 						break;
 					}
 				}
@@ -466,7 +469,7 @@ package
 				_certChainString += "-----BEGIN CERTIFICATE-----\n" + encodedCert + "\n-----END CERTIFICATE-----\n";
 			}
 			//debugPrint("Certificate(s):\n" + _certChainString);
-			var results:Object = { host:_currentHost, certChain:_certChainString };
+			var results:Object = { host:_currentHost, message:_certChainString };
 			debugPrint("Dispatching DONE event");
 			dispatchEvent(new CrawlerEvent(CrawlerEvent.CRAWL_DONE, results));
 		}
@@ -480,14 +483,17 @@ package
 		
 		protected function onSocketSecurity(e:SecurityErrorEvent):void {
 			debugPrint("Security Error: " + e.text);
+			var results:Object = { host:_currentHost, message:e.text };
+			dispatchEvent(new CrawlerEvent(CrawlerEvent.CRAWL_ERROR, results));
 			return;
 		}
 		
 		protected function onSocketError(e:IOErrorEvent):void {
 			debugPrint("Socket Error: " + e.text);
+			var results:Object = { host:_currentHost, message:e.text };
+			dispatchEvent(new CrawlerEvent(CrawlerEvent.CRAWL_ERROR, results));
 			return;
 		}
-		
 	}
 
 }

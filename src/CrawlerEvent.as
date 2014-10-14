@@ -24,6 +24,7 @@ package
 	public class CrawlerEvent extends Event
 	{
 		public static const CRAWL_DONE:String = "obtained certificate";
+		public static const CRAWL_ERROR:String = "crawl error";
 		public var result:Object;
 		
 		public function CrawlerEvent(type:String, result:Object, bubbles:Boolean=false, cancelable:Boolean=false) {
