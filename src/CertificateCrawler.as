@@ -113,7 +113,7 @@ package
 			
 			debugPrint("Beginning test for " + host.name + ":" + host.port);
 			// Attempt to load socket policy file from specified host and policy port
-			Security.loadPolicyFile("xmlsocket://" + host.name + ":" + host.pport);
+			//Security.loadPolicyFile("xmlsocket://" + host.name + ":" + host.pport);  // disabled for now
 			_crawlerID = crawlerID;
 			_debug = debug;
 			

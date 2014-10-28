@@ -64,32 +64,27 @@ package
 				{ name:"tlsresearch.byu.edu", port:443, pport: 80}
 			);
 			_secondaryHostsToCheck = new Array(
+				// Top 25000 sites
 				{ name:"qq.com", port:443, pport: 843}
 				,{ name:"promodj.com", port:443, pport: 843 }
-				,{ name:"pof.com", port:443, pport: 843 }
-				/*,{ name:"idwebgame.com", port:443, pport: 843 }
+				,{ name:"idwebgame.com", port:443, pport: 843 }
 				,{ name:"parsnews.com", port:443, pport: 843 }
 				,{ name:"idgameland.com", port:443, pport: 843 }
-				,{ name:"rupapettiya.info", port:443, pport: 843 }
-				,{ name:"coub.com", port:443, pport: 843 }
 				,{ name:"vcp.ir", port:443, pport: 843 }
-				,{ name:"caikuu.com", port:443, pport: 843 }
-				,{ name:"gaydar.net", port:443, pport: 843 }
-				,{ name:"hdwallpapersinn.com", port:443, pport: 843 }
-				,{ name:"sportsbook.ag", port:443, pport: 843 }
-				,{ name:"cpabiznes.com", port:443, pport: 843 }
+				
+				// Porn sites
+				,{ name:"pornclipstv.com", port:443, pport: 843}
+				,{ name:"porno-be.com", port:443, pport: 843 }
+				,{ name:"pornbasetube.com", port:443, pport: 843 }
+				,{ name:"pornozip.net", port:443, pport: 843 }
+				,{ name:"pornorasskazov.net", port:443, pport: 843 }
+				
+				// Business sites
+				,{ name:"airdroid.com", port:443, pport: 843}
 				,{ name:"webhost1.ru", port:443, pport: 843 }
-				,{ name:"adda52.com", port:443, pport: 843 }
-				,{ name:"ytpara.com", port:443, pport: 843 }
-				,{ name:"kak-zarabotat-dengi.com", port:443, pport: 843 }
-				,{ name:"dampress.net", port:443, pport: 843 }
-				,{ name:"speedtest.pl", port:443, pport: 843 }
-				,{ name:"drako.ru", port:443, pport: 843 }
-				,{ name:"dominicanvine.com", port:443, pport: 843 }
-				,{ name:"bankcha.com", port:443, pport: 843 }
-				,{ name:"mayonez.net", port:443, pport: 843 }
-				,{ name:"otaviosaleitao.com.br", port:443, pport: 843 }
-				*/
+				,{ name:"restaurantesecia.com.br", port:443, pport: 843 }
+				,{ name:"speedtest.net.in", port:443, pport: 843 }
+				,{ name:"iprank.ir", port:443, pport: 843 }
 				
 				// Add more hosts to check as follows:
 				// Make sure the host has a socket policy file and note the port its served on with "pport"
@@ -126,10 +121,8 @@ package
 			var hostname:String = results.host.name + ":" + results.host.port;
 			var certificateChain:String = results.message;
 			var reporter:CertificateReporter = new CertificateReporter(hostname, certificateChain, REPORTING_HOST, REPORTING_PORT, REPORTING_PATH, _debug);
-			reporter.addEventListener(ReporterEvent.REPORT_SENT, reportComplete);
+			reporter.addEventListener(ReporterEvent.REPORT_SENT, primaryReportComplete);
 			reporter.start();
-
-			crawlHosts(_secondaryHostsToCheck, _primaryHostsToCheck.length, crawlComplete);
 			return;
 		}
 		
@@ -153,6 +146,14 @@ package
 			return;
 		}
 		
+		private function primaryReportComplete(event:ReporterEvent):void {
+			_numReportsSent++;
+			debugPrint("Reports sent: " + _numReportsSent);
+			
+			crawlHosts(_secondaryHostsToCheck, _primaryHostsToCheck.length, crawlComplete);
+			return;
+		}
+					
 		private function reportComplete(event:ReporterEvent):void {
 			_numReportsSent++;
 			debugPrint("Reports sent: " + _numReportsSent);
