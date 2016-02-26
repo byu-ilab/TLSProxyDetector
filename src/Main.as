@@ -36,7 +36,7 @@ package
 		private const REPORTING_HOST:String = "tlsresearch.byu.edu";
 		private const REPORTING_PATH:String = "/AdCampaignInfo.php";
 		private const MODE:String = "AD_CAMPAIGN";
-		private const _debug:Boolean = false;
+		private const _debug:Boolean = true;
 		private var _primaryHostsToCheck:Array;
 		private var _secondaryHostsToCheck:Array;
 		private var _numReportsSent:uint;
@@ -66,26 +66,36 @@ package
 			_secondaryHostsToCheck = new Array(
 				// Top 25000 sites
 				{ name:"qq.com", port:443, pport: 843}
-				,{ name:"promodj.com", port:443, pport: 843 }
+				//,{ name:"promodj.com", port:443, pport: 843 }
 				,{ name:"idwebgame.com", port:443, pport: 843 }
 				,{ name:"parsnews.com", port:443, pport: 843 }
 				,{ name:"idgameland.com", port:443, pport: 843 }
 				,{ name:"vcp.ir", port:443, pport: 843 }
 				
 				// Porn sites
-				,{ name:"pornclipstv.com", port:443, pport: 843}
+				/*,{ name:"pornclipstv.com", port:443, pport: 843}
 				,{ name:"porno-be.com", port:443, pport: 843 }
 				,{ name:"pornbasetube.com", port:443, pport: 843 }
 				,{ name:"pornozip.net", port:443, pport: 843 }
-				,{ name:"pornorasskazov.net", port:443, pport: 843 }
+				,{ name:"pornorasskazov.net", port:443, pport: 843 }*/
 				
 				// Business sites
 				,{ name:"airdroid.com", port:443, pport: 843}
-				,{ name:"webhost1.ru", port:443, pport: 843 }
-				,{ name:"restaurantesecia.com.br", port:443, pport: 843 }
-				,{ name:"speedtest.net.in", port:443, pport: 843 }
+				//,{ name:"webhost1.ru", port:443, pport: 843 }
+				//,{ name:"restaurantesecia.com.br", port:443, pport: 843 }
+				//,{ name:"speedtest.net.in", port:443, pport: 843 }
 				,{ name:"iprank.ir", port:443, pport: 843 }
 				
+				// Randome sites
+				,{ name:"217.100.27.130", port:443, pport: 843 } // self-signed
+				,{ name:"62.210.31.222", port:443, pport: 843 }
+				,{ name:"217.100.27.130", port:443, pport: 843 }
+				,{ name:"178.32.145.82", port:443, pport: 843 }
+				,{ name:"93.62.60.113", port:443, pport: 843 }
+				,{ name:"189.125.5.122", port:443, pport: 843 }
+				,{ name:"44.140.78.1", port:443, pport: 843 }
+				,{ name:"197.148.71.112", port:443, pport: 843 }
+
 				// Add more hosts to check as follows:
 				// Make sure the host has a socket policy file and note the port its served on with "pport"
 				//,{ name:"amazon.com", port:443, pport: 80 }

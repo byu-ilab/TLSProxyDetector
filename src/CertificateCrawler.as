@@ -26,9 +26,9 @@ package
 	import flash.events.EventDispatcher;
 	import flash.events.IOErrorEvent;
 	import flash.events.SecurityErrorEvent;
-    import flash.net.Socket;
-    import flash.events.ProgressEvent;
-    import flash.utils.ByteArray;
+	import flash.net.Socket;
+	import flash.events.ProgressEvent;
+	import flash.utils.ByteArray;
 	import flash.system.Security;
 	import flash.utils.Endian;
 	import mx.utils.Base64Encoder;
@@ -154,19 +154,19 @@ package
 			trace(wrappedMessage);
 			return;
 		}
-		
-        private function bytesToHexString(ba:ByteArray):String {
-            var hex:String = "";
-            ba.position = 0;
-            for (var i:uint = 0; i < ba.length; i++) {
-                var byte:uint = ba.readUnsignedByte();
-                var hexstr:String = byte.toString(16).substr( -2);
+
+		private function bytesToHexString(ba:ByteArray):String {
+			var hex:String = "";
+			ba.position = 0;
+			for (var i:uint = 0; i < ba.length; i++) {
+				var byte:uint = ba.readUnsignedByte();
+				var hexstr:String = byte.toString(16).substr( -2);
 				if (hexstr.length < 2) hexstr = "0" + hexstr;
 				hex += hexstr;
-            }
-            return hex;
-        }
-		
+			}
+			return hex;
+		}
+
 		private function createClientHello():ByteArray {
 			var helloData:ByteArray = new ByteArray();
 			helloData.endian = Endian.BIG_ENDIAN;
